@@ -6,18 +6,18 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberRepository {
+public class MemberSimpleExRepository {
 
     private final EntityManager em;
 
     //엔티티 아닌 id 반환
-    public Long save(Member member) {
-        em.persist(member);
-        return member.getId();
+    public Long save(MemberSimpleEx memberSimpleEx) {
+        em.persist(memberSimpleEx);
+        return memberSimpleEx.getId();
     }
 
-    public Member find(Long id) {
-        return em.find(Member.class, id);
+    public MemberSimpleEx find(Long id) {
+        return em.find(MemberSimpleEx.class, id);
     }
 
 }
