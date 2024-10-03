@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
@@ -32,13 +35,36 @@ public class MemberApiController {
         return new CreateMemberResponse(id);
     }
 
-    @PutMapping("/api/v2/members/{id}")
+    @PutMapping("/api/v1/members/{id}")
     public UpdateMemberResponse updateMemberV1(
             @PathVariable Long id,
             @RequestBody @Valid UpdateMemberRequest request) {
         memberService.update(id, request.getName());
         Member member = memberService.findOne(id);
         return new UpdateMemberResponse(member.getId(), member.getName());
+    }
+
+    @GetMapping("/api/v2/members")
+    public Result memberV2() {
+        List<Member> memberList = memberService.findMembers();
+        List<MemberDto> memberDtos = memberList.stream()
+                .map(m -> new MemberDto(m.getName()))
+                .collect(Collectors.toList());
+
+        return new Result(memberDtos.size(), memberDtos);
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static class Result<T> {
+        private int count;
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static class MemberDto {
+        private String name;
     }
 
     @Data
