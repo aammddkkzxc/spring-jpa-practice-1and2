@@ -26,7 +26,7 @@ public class OrderSimpleApiController {
         return orderRepository.findAllByString(new OrderSearch());
     }
 
-    @GetMapping("")
+    @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> ordersV2() {
 
         //N + 1 문제
@@ -35,6 +35,16 @@ public class OrderSimpleApiController {
         List<Order> orders = orderRepository.findAllByString(new OrderSearch());
 
         // 회원 N(2) + 배송 N(2)
+        return orders.stream().map(order -> new SimpleOrderDto(order))
+                .collect(Collectors.toList());
+    }
+
+    //fetch join사용
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3() {
+
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+
         return orders.stream().map(order -> new SimpleOrderDto(order))
                 .collect(Collectors.toList());
     }
