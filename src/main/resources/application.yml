@@ -12,6 +12,7 @@ spring:
 #        show_sql: true 로거가 아닌 sout를 통해 sql출력. 권장 x 운영서버에서는 로거 통하는게 좋음
         format_sql: true
         default_batch_fetch_size: 100
+    open-in-view: false
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace #스프링 부트 2.x, hibernate5
